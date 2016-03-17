@@ -1,0 +1,69 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<meta charset="UTF-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1.0">
+	<title>Random Jokes</title>
+	<link href='https://fonts.googleapis.com/css?family=Montserrat' rel='stylesheet' type='text/css'>
+	<link href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-1q8mTJOASx8j1Au+a5WDVnPi2lkFfwwEAa8hDDdjZlpLegxhjVME1fgjWPGmkzs7" crossorigin="anonymous">
+	<script src="https://ajax.googleapis.com/ajax/libs/jquery/1.12.0/jquery.min.js"></script>
+	<script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/js/bootstrap.min.js" integrity="sha384-0mSbJDEHialfmuBBQP6A4Qrprq5OVfW37PRR3j5ELqxss1yVqOtnepnHVP9aJ7xS" crossorigin="anonymous"></script>
+	<link rel="stylesheet" href="style.css">
+</head>
+<body>
+  <div class="container">
+    <div class="row">
+    	<div class="col-md-12">
+    		<h1> Random Joke Generator </h1>
+    		<div class="well clearfix">
+    			<blockquote>
+                    <p id="getOtherJoke"></p>
+                    <footer>Chuck Norris <cite title="Source Title">Internet Database</cite></footer>
+                </blockquote>
+                <div class="fright">
+                    <button class="btn btn-success" id="getMessage">New Joke</button>
+                </div>
+                <div class="fleft">
+                	<a id="twitter" data-size="large" target="_blank">
+                    <button type="button" class="btn btn-primary">Tweet Joke!</button></a>
+	            </div>
+    		</div>	
+    		<p class="small-text"> by Oxana Web </p>
+        </div>		
+    </div> 	
+  </div>	
+<script>
+    $(document).ready(function() {
+
+        $.getJSON("http://api.icndb.com/jokes?escape=javascript", function(json) {
+            var obj = JSON.stringify(json);
+            var data = JSON.parse(obj);
+            var jokes = [];
+            var jokeDisplay = document.getElementById("getOtherJoke");
+            for ( var i = 0; i < data.value.length; i++) {
+            	jokes.push(data.value[i].joke);
+            }
+            function pickJoke() {
+	            var random = Math.floor(Math.random() * jokes.length);
+	            return jokes[random];
+            }
+
+            $("#getOtherJoke").append(pickJoke);
+
+            $("#getMessage").on("click", function(){
+                pickedJoke = pickJoke();	
+                jokeDisplay.textContent = pickedJoke;
+
+            });
+
+            $("#twitter").on("click", function(){
+            	var textJoke = $('#getOtherJoke').text();
+            	$(this).attr("href", 'https://twitter.com/intent/tweet?text=' + textJoke);
+            });
+
+        });
+
+    });
+</script>
+</body>
+</html>
